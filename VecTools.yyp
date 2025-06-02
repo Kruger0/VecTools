@@ -9,7 +9,9 @@
     "name":"Default",
   },
   "defaultScriptType":1,
-  "Folders":[],
+  "Folders":[
+    {"$GMFolder":"","%Name":"VecTools","folderPath":"folders/VecTools.yy","name":"VecTools","resourceType":"GMFolder","resourceVersion":"2.0",},
+  ],
   "ForcedPrefabProjectReferences":[],
   "IncludedFiles":[],
   "isEcma":false,
@@ -19,7 +21,10 @@
   },
   "name":"VecTools",
   "resources":[
+    {"id":{"name":"Object1","path":"objects/Object1/Object1.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"id":{"name":"Vector2","path":"scripts/Vector2/Vector2.yy",},},
+    {"id":{"name":"Vector3","path":"scripts/Vector3/Vector3.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
