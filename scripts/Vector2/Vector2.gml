@@ -81,10 +81,10 @@ function Vector2(_x = 0, _y = _x) constructor {
             return point_distance(x, y, v, v);
         }
     }
-    static Mag = function() {
+    static Length = function() {
         return point_distance(0, 0, x, y);
     }
-    static MagSq = function() {
+    static LengthSq = function() {
         return dot_product(x, y, x, y);
     }
     static Dot = function(v) {
@@ -203,19 +203,19 @@ function Vector2(_x = 0, _y = _x) constructor {
             __Trace("Slerp() accepts only a Vector");
             return self;
         }
-        var _magA = Mag();
-        var _magB = v.Mag();
+        var _magA = Length();
+        var _magB = v.Length();
         if (_magA == 0 || _magB == 0) return self;
         var _dot = clamp(dot_product(x / _magA, y / _magA, v.x / _magB, v.y / _magB), -1, 1);
         var _angle = arccos(_dot) * amt;
         var _relX = v.x - x * _dot;
         var _relY = v.y - y * _dot;
-        var _relMag = point_distance(0, 0, _relX, _relY);
-        if (_relMag == 0) return self;
-        _relX /= _relMag; _relY /= _relMag;
-        var _targetMag = lerp(_magA, _magB, amt);
-        x = (x * cos(_angle) + _relX * sin(_angle)) * _targetMag / _magA;
-        y = (y * cos(_angle) + _relY * sin(_angle)) * _targetMag / _magA;
+        var _relLen = point_distance(0, 0, _relX, _relY);
+        if (_relLen == 0) return self;
+        _relX /= _relLen; _relY /= _relLen;
+        var _targLen = lerp(_magA, _magB, amt);
+        x = (x * cos(_angle) + _relX * sin(_angle)) * _targLen / _magA;
+        y = (y * cos(_angle) + _relY * sin(_angle)) * _targLen / _magA;
         return self;
     }
     static Approach = function(v, step) {
@@ -234,15 +234,15 @@ function Vector2(_x = 0, _y = _x) constructor {
         return self;
     }
     
-    static Angle = function() {
-        return point_direction(0, 0, x, y);
-    }
     static AngleTo = function(v) {
         if (is_instanceof(v, Vector2)) {
             return point_direction(x, y, v.x, v.y);
         }
         __Trace("AngleTo() accepts only a Vector");
         return 0;
+    }
+    static Angle = function() {
+        return point_direction(0, 0, x, y);
     }
     static Perpendicular = function() {
         return new Vector2(-y, x);

@@ -82,10 +82,10 @@ function Vector3(_x = 0, _y = _x, _z = _x) constructor {
             return point_distance_3d(x, y, z, v, v, v);
         }
     }
-    static Mag = function() {
+    static Length = function() {
         return point_distance_3d(0, 0, 0, x, y, z);
     }
-    static MagSq = function() {
+    static LengthSq = function() {
         return dot_product_3d(x, y, z, x, y, z);
     }    
     static Dot = function(v) {
@@ -226,8 +226,8 @@ function Vector3(_x = 0, _y = _x, _z = _x) constructor {
             __Trace("Slerp() accepts only a Vector3");
             return self;
         }
-        var _magA = Mag();
-        var _magB = v.Mag();
+        var _magA = Length();
+        var _magB = v.Length();
         if (_magA == 0 || _magB == 0) return self;
         var _nx = x / _magA; var _ny = y / _magA; var _nz = z / _magA;
         var _dot = clamp(dot_product_3d(_nx, _ny, _nz, v.x / _magB, v.y / _magB, v.z / _magB), -1, 1);
@@ -235,14 +235,14 @@ function Vector3(_x = 0, _y = _x, _z = _x) constructor {
         var _relX = v.x - _nx * _dot;
         var _relY = v.y - _ny * _dot;
         var _relZ = v.z - _nz * _dot;
-        var _relMag = point_distance_3d(0, 0, 0, _relX, _relY, _relZ);
-        if (_relMag == 0) return self;
-        _relX /= _relMag; _relY /= _relMag; _relZ /= _relMag;
-        var _targetMag = lerp(_magA, _magB, amt);
+        var _relLen = point_distance_3d(0, 0, 0, _relX, _relY, _relZ);
+        if (_relLen == 0) return self;
+        _relX /= _relLen; _relY /= _relLen; _relZ /= _relLen;
+        var _targLen = lerp(_magA, _magB, amt);
         var _s = sin(_angle); var _c = cos(_angle);
-        x = (_nx * _c + _relX * _s) * _targetMag;
-        y = (_ny * _c + _relY * _s) * _targetMag;
-        z = (_nz * _c + _relZ * _s) * _targetMag;
+        x = (_nx * _c + _relX * _s) * _targLen;
+        y = (_ny * _c + _relY * _s) * _targLen;
+        z = (_nz * _c + _relZ * _s) * _targLen;
         return self;
     }
     static Approach = function(v, step) {
