@@ -6,7 +6,7 @@ function Vector3(_x = 0, _y = _x, _z = _x) constructor {
     z = _z;
     
     static __Trace = function(msg) {
-        show_debug_message($"[VECTOOLS] - {msg}");
+        show_debug_message($"[VEC3] - {msg}");
     }
     
     static Set = function(v) {
@@ -112,6 +112,16 @@ function Vector3(_x = 0, _y = _x, _z = _x) constructor {
         x /= _mag; y /= _mag; z /= _mag;
         return self;
     }
+    static OrthoNormalize = function(n) {
+        if (!is_instanceof(n, Vector3)) {
+            __Trace("OrthoNormalize() accepts only a Vector3");
+            return self;
+        }
+        var _n = n.Clone().Normalize();
+        var _dot = dot_product_3d(x, y, z, _n.x, _n.y, _n.z);
+        x -= _n.x * _dot; y -= _n.y * _dot; z -= _n.z * _dot;
+        return Normalize();
+    }
     
     static Reflect = function(v) {
         if (is_instanceof(v, Vector3)) {
@@ -176,6 +186,10 @@ function Vector3(_x = 0, _y = _x, _z = _x) constructor {
         x = round(x); y = round(y); z = round(z);
         return self;
     }
+    static Sign = function() {
+        x = sign(x); y = sign(y); z = sign(z);
+        return self;
+    }
     
     static Transform = function(m) {
         static _v = array_create(4);
@@ -204,6 +218,44 @@ function Vector3(_x = 0, _y = _x, _z = _x) constructor {
             x = lerp(x, v.x, amt); y = lerp(y, v.y, amt); z = lerp(z, v.z, amt);
         } else {
             x = lerp(x, v, amt); y = lerp(y, v, amt); z = lerp(z, v, amt);
+        }
+        return self;
+    }
+    static Slerp = function(v, amt) {
+        if (!is_instanceof(v, Vector3)) {
+            __Trace("Slerp() accepts only a Vector3");
+            return self;
+        }
+        var _magA = Mag();
+        var _magB = v.Mag();
+        if (_magA == 0 || _magB == 0) return self;
+        var _nx = x / _magA; var _ny = y / _magA; var _nz = z / _magA;
+        var _dot = clamp(dot_product_3d(_nx, _ny, _nz, v.x / _magB, v.y / _magB, v.z / _magB), -1, 1);
+        var _angle = arccos(_dot) * amt;
+        var _relX = v.x - _nx * _dot;
+        var _relY = v.y - _ny * _dot;
+        var _relZ = v.z - _nz * _dot;
+        var _relMag = point_distance_3d(0, 0, 0, _relX, _relY, _relZ);
+        if (_relMag == 0) return self;
+        _relX /= _relMag; _relY /= _relMag; _relZ /= _relMag;
+        var _targetMag = lerp(_magA, _magB, amt);
+        var _s = sin(_angle); var _c = cos(_angle);
+        x = (_nx * _c + _relX * _s) * _targetMag;
+        y = (_ny * _c + _relY * _s) * _targetMag;
+        z = (_nz * _c + _relZ * _s) * _targetMag;
+        return self;
+    }
+    static Approach = function(v, step) {
+        if (is_instanceof(v, Vector3)) {
+            var _dx = v.x - x; var _dy = v.y - y; var _dz = v.z - z;
+            var _dist = point_distance_3d(0, 0, 0, _dx, _dy, _dz);
+            if (_dist <= step || _dist == 0) {
+                x = v.x; y = v.y; z = v.z;
+            } else {
+                x += (_dx / _dist) * step; y += (_dy / _dist) * step; z += (_dz / _dist) * step;
+            }
+        } else {
+            __Trace("Approach() accepts only a Vector");
         }
         return self;
     }

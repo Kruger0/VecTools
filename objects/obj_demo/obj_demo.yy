@@ -1,15 +1,15 @@
 {
   "$GMObject":"",
-  "%Name":"Object1",
+  "%Name":"obj_demo",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"Object1",
+  "name":"obj_demo",
   "overriddenProperties":[],
   "parent":{
-    "name":"VecTools",
-    "path":"VecTools.yyp",
+    "name":"Demo",
+    "path":"folders/Demo.yy",
   },
   "parentObjectId":null,
   "persistent":false,

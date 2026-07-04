@@ -10,6 +10,7 @@
   },
   "defaultScriptType":1,
   "Folders":[
+    {"$GMFolder":"","%Name":"Demo","folderPath":"folders/Demo.yy","name":"Demo","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"VecTools","folderPath":"folders/VecTools.yy","name":"VecTools","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
   "ForcedPrefabProjectReferences":[],
@@ -21,15 +22,16 @@
   },
   "name":"VecTools",
   "resources":[
-    {"id":{"name":"Object1","path":"objects/Object1/Object1.yy",},},
-    {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"id":{"name":"obj_demo","path":"objects/obj_demo/obj_demo.yy",},},
+    {"id":{"name":"rm_demo","path":"rooms/rm_demo/rm_demo.yy",},},
     {"id":{"name":"Vector2","path":"scripts/Vector2/Vector2.yy",},},
     {"id":{"name":"Vector3","path":"scripts/Vector3/Vector3.yy",},},
+    {"id":{"name":"Vector4","path":"scripts/Vector4/Vector4.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"roomId":{"name":"rm_demo","path":"rooms/rm_demo/rm_demo.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[
