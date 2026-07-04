@@ -26,7 +26,6 @@
     {"id":{"name":"rm_demo","path":"rooms/rm_demo/rm_demo.yy",},},
     {"id":{"name":"Vector2","path":"scripts/Vector2/Vector2.yy",},},
     {"id":{"name":"Vector3","path":"scripts/Vector3/Vector3.yy",},},
-    {"id":{"name":"Vector4","path":"scripts/Vector4/Vector4.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",

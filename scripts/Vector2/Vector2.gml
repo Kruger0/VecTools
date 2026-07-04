@@ -25,7 +25,11 @@ function Vector2(_x = 0, _y = _x) constructor {
         return self;
     }
     static Equals = function(v) {
-        return (x == v.x && y == v.y);
+        if (is_instanceof(v, Vector3)) {
+            return (x == v.x && y == v.y);
+        } else {
+            return (x == v && y == v);
+        }
     }
     
     static Zero = function() {
@@ -206,10 +210,11 @@ function Vector2(_x = 0, _y = _x) constructor {
         var _magA = Length();
         var _magB = v.Length();
         if (_magA == 0 || _magB == 0) return self;
+        var _nx = x / _magA; var _ny = y / _magA;
         var _dot = clamp(dot_product(x / _magA, y / _magA, v.x / _magB, v.y / _magB), -1, 1);
         var _angle = arccos(_dot) * amt;
-        var _relX = v.x - x * _dot;
-        var _relY = v.y - y * _dot;
+        var _relX = v.x - _nx * _dot;
+        var _relY = v.y - _ny * _dot;
         var _relLen = point_distance(0, 0, _relX, _relY);
         if (_relLen == 0) return self;
         _relX /= _relLen; _relY /= _relLen;
@@ -247,7 +252,7 @@ function Vector2(_x = 0, _y = _x) constructor {
     static Perpendicular = function() {
         return new Vector2(-y, x);
     }
-    static FromPolar = function(angle, length) {
+    static FromPolar = function(angle, length = 1) {
         x = lengthdir_x(length, angle);
         y = lengthdir_y(length, angle);
         return self;

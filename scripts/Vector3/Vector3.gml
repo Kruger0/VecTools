@@ -26,7 +26,11 @@ function Vector3(_x = 0, _y = _x, _z = _x) constructor {
         return self;
     }
     static Equals = function(v) {
-        return (x == v.x && y == v.y && z == v.z); 
+        if (is_instanceof(v, Vector3)) {
+            return (x == v.x && y == v.y && z == v.z);
+        } else {
+            return (x == v && y == v && z == v);
+        }
     }
     
     static Zero = function() {
