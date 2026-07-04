@@ -106,9 +106,9 @@ function Vector2(_x = 0, _y = _x) constructor {
         return 0;
     }
     static Normalize = function() {
-        var _mag = point_distance(0, 0, x, y);
-        if (_mag == 0) return self;
-        x /= _mag; y /= _mag;
+        var _len = point_distance(0, 0, x, y);
+        if (_len == 0) return self;
+        x /= _len; y /= _len;
         return self;
     }
     
@@ -124,12 +124,12 @@ function Vector2(_x = 0, _y = _x) constructor {
     }
     static Project = function(v) {
         if (is_instanceof(v, Vector2)) {
-            var _magSq = dot_product(v.x, v.y, v.x, v.y);
-            if (_magSq == 0) {
+            var _lenSq = dot_product(v.x, v.y, v.x, v.y);
+            if (_lenSq == 0) {
                 __Trace("Project() cannot project onto a zero vector");
                 return self;
             }
-            var _fac = dot_product(x, y, v.x, v.y) / _magSq;
+            var _fac = dot_product(x, y, v.x, v.y) / _lenSq;
             x = v.x * _fac; y = v.y * _fac;
         } else {
             __Trace("Project() accepts only a Vector");
@@ -207,20 +207,22 @@ function Vector2(_x = 0, _y = _x) constructor {
             __Trace("Slerp() accepts only a Vector");
             return self;
         }
-        var _magA = Length();
-        var _magB = v.Length();
-        if (_magA == 0 || _magB == 0) return self;
-        var _nx = x / _magA; var _ny = y / _magA;
-        var _dot = clamp(dot_product(x / _magA, y / _magA, v.x / _magB, v.y / _magB), -1, 1);
+        var _lenA = Length();
+        var _lenB = v.Length();
+        if (_lenA == 0 || _lenB == 0) return self;
+        var _nx = x / _lenA; var _ny = y / _lenA;
+        var _vx = v.x / _lenB; var _vy = v.y / _lenB;
+        var _dot = clamp(dot_product(_nx, _ny, _vx, _vy), -1, 1);
         var _angle = arccos(_dot) * amt;
-        var _relX = v.x - _nx * _dot;
-        var _relY = v.y - _ny * _dot;
+        var _relX = _vx - _nx * _dot;
+        var _relY = _vy - _ny * _dot;
         var _relLen = point_distance(0, 0, _relX, _relY);
         if (_relLen == 0) return self;
         _relX /= _relLen; _relY /= _relLen;
-        var _targLen = lerp(_magA, _magB, amt);
-        x = (x * cos(_angle) + _relX * sin(_angle)) * _targLen / _magA;
-        y = (y * cos(_angle) + _relY * sin(_angle)) * _targLen / _magA;
+        var _targLen = lerp(_lenA, _lenB, amt);
+        var _s = sin(_angle); var _c = cos(_angle);
+        x = (_nx * _c + _relX * _s) * _targLen;
+        y = (_ny * _c + _relY * _s) * _targLen;
         return self;
     }
     static Approach = function(v, step) {

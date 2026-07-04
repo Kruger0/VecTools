@@ -111,14 +111,14 @@ function Vector3(_x = 0, _y = _x, _z = _x) constructor {
         return new Vector3(0);
     }
     static Normalize = function() {
-        var _mag = point_distance_3d(0, 0, 0, x, y, z);
-        if (_mag == 0) return self;
-        x /= _mag; y /= _mag; z /= _mag;
+        var _len = point_distance_3d(0, 0, 0, x, y, z);
+        if (_len == 0) return self;
+        x /= _len; y /= _len; z /= _len;
         return self;
     }
-    static OrthoNormalize = function(n) {
+    static Orthogonalize = function(n) {
         if (!is_instanceof(n, Vector3)) {
-            __Trace("OrthoNormalize() accepts only a Vector3");
+            __Trace("Orthogonalize() accepts only a Vector3");
             return self;
         }
         var _n = n.Clone().Normalize();
@@ -139,12 +139,12 @@ function Vector3(_x = 0, _y = _x, _z = _x) constructor {
     }
     static Project = function(v) {
         if (is_instanceof(v, Vector3)) {
-            var _magSq = dot_product_3d(v.x, v.y, v.z, v.x, v.y, v.z);
-            if (_magSq == 0) {
+            var _lenSq = dot_product_3d(v.x, v.y, v.z, v.x, v.y, v.z);
+            if (_lenSq == 0) {
                 __Trace("Project() cannot project onto a zero vector");
                 return self;
             }
-            var _fac = dot_product_3d(x, y, z, v.x, v.y, v.z) / _magSq;
+            var _fac = dot_product_3d(x, y, z, v.x, v.y, v.z) / _lenSq;
             x = v.x * _fac; y = v.y * _fac; z = v.z * _fac;
         } else {
             __Trace("Project() accepts only a Vector");
@@ -230,19 +230,20 @@ function Vector3(_x = 0, _y = _x, _z = _x) constructor {
             __Trace("Slerp() accepts only a Vector3");
             return self;
         }
-        var _magA = Length();
-        var _magB = v.Length();
-        if (_magA == 0 || _magB == 0) return self;
-        var _nx = x / _magA; var _ny = y / _magA; var _nz = z / _magA;
-        var _dot = clamp(dot_product_3d(_nx, _ny, _nz, v.x / _magB, v.y / _magB, v.z / _magB), -1, 1);
+        var _lenA = Length();
+        var _lenB = v.Length();
+        if (_lenA == 0 || _lenB == 0) return self;
+        var _nx = x / _lenA; var _ny = y / _lenA; var _nz = z / _lenA;
+        var _vx = v.x / _lenB; var _vy = v.y / _lenB; var _vz = v.z / _lenB;
+        var _dot = clamp(dot_product_3d(_nx, _ny, _nz, _vx, _vy, _vz), -1, 1);
         var _angle = arccos(_dot) * amt;
-        var _relX = v.x - _nx * _dot;
-        var _relY = v.y - _ny * _dot;
-        var _relZ = v.z - _nz * _dot;
+        var _relX = _vx - _nx * _dot;
+        var _relY = _vy - _ny * _dot;
+        var _relZ = _vz - _nz * _dot;
         var _relLen = point_distance_3d(0, 0, 0, _relX, _relY, _relZ);
         if (_relLen == 0) return self;
         _relX /= _relLen; _relY /= _relLen; _relZ /= _relLen;
-        var _targLen = lerp(_magA, _magB, amt);
+        var _targLen = lerp(_lenA, _lenB, amt);
         var _s = sin(_angle); var _c = cos(_angle);
         x = (_nx * _c + _relX * _s) * _targLen;
         y = (_ny * _c + _relY * _s) * _targLen;
