@@ -1,522 +1,220 @@
 
-
-function Vector3(x, y, z) constructor {
-    self.x = x ?? 0;
-    self.y = y ?? self.x;
-    self.z = z ?? self.x;
-    xstart = self.x;
-    ystart = self.y;
-    zstart = self.z;
+///@func Vector3([x], [y], [z])
+function Vector3(_x = 0, _y = _x, _z = _x) constructor {
+    x = _x;
+    y = _y;
+    z = _z;
     
-    static Set = function() {
-        if (is_numeric(argument[0])) {
-            x = argument[0];
-            y = argument[1] ?? argument[0];
-            z = argument[2] ?? argument[0];
+    static __Trace = function(msg) {
+        show_debug_message($"[VECTOOLS] - {msg}");
+    }
+    
+    static Set = function(v) {
+        if (is_instanceof(v, Vector3)) {
+            x = v.x; y = v.y; z = v.z;
         } else {
-            x = argument[0].x;
-            y = argument[0].y;
-            z = argument[0].z;
+            x = v; y = v; z = v;
         }
         return self;
     }    
-    static Reset = function() {
-        x = xstart;
-        y = ystart;
-        z = zstart;
+    static Negate = function() {
+        x = -x; y = -y; z = -z;
         return self;
     }
-    static GetStart = function() {
-        return new Vector3(xstart, ystart, zstart);
-    }
-    static Negate = function() {
-        if (is_instanceof(self, Vector3)) {
-            x = -x;
-            y = -y;
-            z = -z;
-            return self;
-        } else {
-            return new Vector3(-argument[0].x, -argument[0].y, -argument[0].z);
-        }
-    }
     static Abs = function() {
-        if (is_instanceof(self, Vector3)) {
-            x = abs(x);
-            y = abs(y);
-            z = abs(z);
-            return self;
-        } else {
-            return new Vector3(
-                abs(argument[0].x), 
-                abs(argument[0].y), 
-                abs(argument[0].z)
-            )
-        }
+        x = abs(x); y = abs(y); z = abs(z);
+        return self;
     }
-    static Equals = function() {
-        if (is_instanceof(self, Vector3)) {
-            return (x == argument[0].x && y == argument[0].y && z == argument[0].z);
-        } else {
-            return (argument[0].x == argument[1].x && argument[0].y == argument[1].y && argument[0].z == argument[1].z);
-        }
+    static Equals = function(v) {
+        return (x == v.x && y == v.y && z == v.z); 
     }
     
     static Zero = function() {
-        if (is_instanceof(self, Vector3)) {
-            x = 0;
-            y = 0;
-            z = 0;
-            return self;
-        } else {
-            return new Vector3(0, 0, 0);
-        }        
+        x = 0; y = 0; z = 0;
+        return self;
     }
     static One = function() {
-        if (is_instanceof(self, Vector3)) {
-            x = 1;
-            y = 1;
-            z = 1;
-            return self;
-        } else {
-            return new Vector3(1, 1, 1);
-        }
+        x = 1; y = 1; z = 1;
+        return self;
     }
     static Infinity = function() {
-        if (is_instanceof(self, Vector3)) {
-            x = infinity;
-            y = infinity;
-            z = infinity;
-            return self;
-        } else {
-            return new Vector3(infinity, infinity, infinity);
-        }
-    }
-    static NegativeInfinity = function() {
-        if (is_instanceof(self, Vector3)) {
-            x = -infinity;
-            y = -infinity;
-            z = -infinity;
-            return self;
-        } else {
-            return new Vector3(-infinity, -infinity, -infinity);
-        }
+        x = infinity; y = infinity; z = infinity;
+        return self;
     }
     
-    static Add = function() {
-        if (is_instanceof(self, Vector3)) {
-            x += argument[0].x;
-            y += argument[0].y;
-            z += argument[0].z;
-            return self;
+    static Add = function(v) {
+        if (is_instanceof(v, Vector3)) {
+            x += v.x; y += v.y; z += v.z;
         } else {
-            return new Vector3(
-                argument[0].x + argument[1].x, 
-                argument[0].y + argument[1].y, 
-                argument[0].z + argument[1].z
-            )
+            x += v; y += v; z += v;
         }
+        return self;
     }
-    static Subtract = function() {
-        if (is_instanceof(self, Vector3)) {
-            x -= argument[0].x;
-            y -= argument[0].y;
-            z -= argument[0].z;
-            return self
+    static Sub = function(v) {
+        if (is_instanceof(v, Vector3)) {
+            x -= v.x; y -= v.y; z -= v.z;
         } else {
-            return new Vector3(
-                argument[0].x - argument[1].x, 
-                argument[0].y - argument[1].y, 
-                argument[0].z - argument[1].z
-            )
+            x -= v; y -= v; z -= v;
         }
-    }    
-    static Multiply = function() {
-        if (is_instanceof(self, Vector3)) {
-            if (is_numeric(argument[0])) {
-                x *= argument[0];
-                y *= argument[0];
-                z *= argument[0];
-            } else {
-                x *= argument[0].x;
-                y *= argument[0].y;
-                z *= argument[0].z;
-            }
-            return self
+        return self;
+    }
+    static Mul = function(v) {
+        if (is_instanceof(v, Vector3)) {
+            x *= v.x; y *= v.y; z *= v.z;
         } else {
-            if (is_numeric(argument[1])) {
-                return new Vector3(
-                    argument[0].x * argument[1], 
-                    argument[0].y * argument[1], 
-                    argument[0].z * argument[1]
-                )
-            } else {
-                return new Vector3(
-                    argument[0].x * argument[1].x, 
-                    argument[0].y * argument[1].y, 
-                    argument[0].z * argument[1].z
-                )
-            }
+            x *= v; y *= v; z *= v;
         }
-    }    
-    static Divide = function() {
-        if (is_instanceof(self, Vector3)) {
-            if (is_numeric(argument[0])) {
-                if (argument[0] == 0) return Zero();
-                x /= argument[0];
-                y /= argument[0];
-                z /= argument[0];
-            } else {
-                x = (argument[0].x == 0 ? 0 : x / argument[0].x);
-                y = (argument[0].y == 0 ? 0 : y / argument[0].y);
-                z = (argument[0].z == 0 ? 0 : z / argument[0].z);
-            }            
-            return self
+        return self;
+    }
+    static Div = function(v) {
+        if (is_instanceof(v, Vector3)) {
+            x /= v.x; y /= v.y; z /= v.z; 
         } else {
-            if (is_numeric(argument[1])) {
-                if (argument[1] == 0) return new Vector3(0, 0, 0);
-                return new Vector3(
-                    argument[0].x / argument[1], 
-                    argument[0].y / argument[1], 
-                    argument[0].z / argument[1]
-                )
-            } else {
-                return new Vector3(
-                    argument[1].x == 0 ? 0 : argument[0].x / argument[1].x,
-                    argument[1].y == 0 ? 0 : argument[0].y / argument[1].y,
-                    argument[1].z == 0 ? 0 : argument[0].z / argument[1].z
-                )
-            }
+            x /= v; y /= v; z /= v;
         }
+        return self;
     }
     
-    static DistanceTo = function() {
-        if (is_instanceof(self, Vector3)) {
-            return point_distance_3d(x, y, z, argument[0].x, argument[0].y, argument[0].z);
+    static DistTo = function(v) {
+        if (is_instanceof(v, Vector3)) {
+            return point_distance_3d(x, y, z, v.x, v.y, v.z);
         } else {
-            return point_distance_3d(argument[0].x, argument[0].y, argument[0].z, argument[1].x, argument[1].y, argument[1].z);
+            return point_distance_3d(x, y, z, v, v, v);
         }
     }
-    static Magnitude = function() {
-        if (is_instanceof(self, Vector3)) {
-            return point_distance_3d(0, 0, 0, x, y, z);
-        } else {
-            return point_distance_3d(0, 0, 0, argument[0].x, argument[0].y, argument[0].z);
-        }
+    static Mag = function() {
+        return point_distance_3d(0, 0, 0, x, y, z);
     }
-    static MagnitudeSq = function() {
-        if (is_instanceof(self, Vector3)) {
-            return dot_product_3d(x, y, z, x, y, z);
-        } else {
-            return dot_product_3d(argument[0].x, argument[0].y, argument[0].z, argument[0].x, argument[0].y, argument[0].z);
-        }
+    static MagSq = function() {
+        return dot_product_3d(x, y, z, x, y, z);
     }    
-    static Dot = function() {
-        if (is_instanceof(self, Vector3)) {
-            return dot_product_3d(x, y, z, argument[0].x, argument[0].y, argument[0].z);
-        } else {
-            return dot_product_3d(argument[0].x, argument[0].y, argument[0].z, argument[1].x, argument[1].y, argument[1].z);
+    static Dot = function(v) {
+        if (is_instanceof(v, Vector3)) {
+            return dot_product_3d(x, y, z, v.x, v.y, v.z);
         }
+        __Trace("Dot() accepts only a Vector");
+        return 0;
     }
-    static Cross = function() {
-        if (is_instanceof(self, Vector3)) {
+    static Cross = function(v) {
+        if (is_instanceof(v, Vector3)) {
             return new Vector3(
-                (y * argument[0].z) - (argument[0].y * z),
-                (z * argument[0].x) - (argument[0].z * x),
-                (x * argument[0].y) - (argument[0].x * y)
+                (y * v.z) - (v.y * z),
+                (z * v.x) - (v.z * x),
+                (x * v.y) - (v.x * y)
             );
-        } else {
-        return new Vector3(
-                (argument[0].y * argument[1].z) - (argument[1].y * argument[0].z),
-                (argument[0].z * argument[1].x) - (argument[1].z * argument[0].x),
-                (argument[0].x * argument[1].y) - (argument[1].x * argument[0].y)
-            );
-        }         
+        }
+        __Trace("Cross() accepts only a Vector");
+        return new Vector3(0);
     }
     static Normalize = function() {
-        if (is_instanceof(self, Vector3)) {
-            if (x == 0 && y == 0 && z == 0) return Zero();
-            var _mag = point_distance_3d(0, 0, 0, x, y, z);
-            x /= _mag;
-            y /= _mag;
-            z /= _mag;
-            return self;
-        } else {
-            if (argument[0].x == 0 && argument[0].y == 0 && argument[0].z == 0) return new Vector3(0, 0, 0);
-            var _mag = point_distance_3d(0, 0, 0, argument[0].x, argument[0].y, argument[0].z);
-            return new Vector3(
-                argument[0].x / _mag, 
-                argument[0].y / _mag, 
-                argument[0].z / _mag
-            );
-        }
+        var _mag = point_distance_3d(0, 0, 0, x, y, z);
+        if (_mag == 0) return self;
+        x /= _mag; y /= _mag; z /= _mag;
+        return self;
     }
     
-    static Reflect = function() {
-        if (is_instanceof(self, Vector3)) {
-            var _normal = argument[0];
-            var _dot = Dot(_normal);
-            var _scalar = 2 * _dot;
-            var _reflected = Vector3.Multiply(_normal, _scalar);
-            Subtract(_reflected);
-            return self;
+    static Reflect = function(v) {
+        if (is_instanceof(v, Vector3)) {
+            var _n = v.Clone().Normalize();
+            var _dot = Dot(_n);
+            Sub(_n.Mul(2 * _dot));
         } else {
-            var _normal = argument[1];
-            var _dot = argument[0].Dot(_normal);
-            var _scalar = 2 * _dot;
-            var _reflected = Vector3.Multiply(_normal, _scalar);
-            return Vector3.Subtract(argument[0], _reflected);
+            __Trace("Reflect() accepts only a Vector");
         }
+        return self;
     }
-    static Project = function() {
-        if (is_instanceof(self, Vector3)) {
-            var _denominator = dot_product_3d(argument[0].x, argument[0].y, argument[0].z, argument[0].x, argument[0].y, argument[0].z);
-            if (_denominator == 0) return Zero();
-            var _factor = dot_product_3d(x, y, z, argument[0].x, argument[0].y, argument[0].z) / _denominator;
-            x = argument[0].x * _factor;
-            y = argument[0].y * _factor;
-            z = argument[0].z * _factor;
-            return self;
+    static Project = function(v) {
+        if (is_instanceof(v, Vector3)) {
+            var _magSq = dot_product_3d(v.x, v.y, v.z, v.x, v.y, v.z);
+            if (_magSq == 0) {
+                __Trace("Project() cannot project onto a zero vector");
+                return self;
+            }
+            var _fac = dot_product_3d(x, y, z, v.x, v.y, v.z) / _magSq;
+            x = v.x * _fac; y = v.y * _fac; z = v.z * _fac;
         } else {
-            var _denominator = dot_product_3d(argument[1].x, argument[1].y, argument[1].z, argument[1].x, argument[1].y, argument[1].z);
-            if (_denominator == 0) return new Vector3(0, 0, 0);
-            var _factor = dot_product_3d(argument[0].x, argument[0].y, argument[0].z, argument[1].x, argument[1].y, argument[1].z) / _denominator;
-            return new Vector3(
-                argument[1].x * _factor, 
-                argument[1].y * _factor,
-                argument[1].z * _factor
-            );
+            __Trace("Project() accepts only a Vector");
         }
+        return self;
     }
     
-    static Clamp = function() {
-        if (is_instanceof(self, Vector3)) {
-            if (is_numeric(argument[0])) {
-                x = clamp(x, argument[0], argument[1]);
-                y = clamp(y, argument[0], argument[1]);
-                z = clamp(z, argument[0], argument[1]);
-            } else {
-                x = clamp(x, argument[0].x, argument[1].x);
-                y = clamp(y, argument[0].y, argument[1].y);
-                z = clamp(z, argument[0].z, argument[1].z);
-            }
-            return self;
+    static Clamp = function(mn, mx) {
+        if (is_instanceof(mn, Vector3)) {
+            x = clamp(x, mn.x, mx.x); y = clamp(y, mn.y, mx.y); z = clamp(z, mn.z, mx.z);
         } else {
-            if (is_numeric(argument[1])) {
-                return new Vector3(
-                    clamp(argument[0].x, argument[1], argument[2]),
-                    clamp(argument[0].y, argument[1], argument[2]),
-                    clamp(argument[0].z, argument[1], argument[2])
-                )
-            } else {
-                return new Vector3(
-                    clamp(argument[0].x, argument[1].x, argument[2].x), 
-                    clamp(argument[0].y, argument[1].y, argument[2].y), 
-                    clamp(argument[0].z, argument[1].z, argument[2].z)
-                )
-            }
+            x = clamp(x, mn, mx); y = clamp(y, mn, mx); z = clamp(z, mn, mx);
         }
+        return self;
     }
-    static Min = function() {
-        if (is_instanceof(self, Vector3)) {
-            if (argument_count > 0) {
-                if (is_numeric(argument[0])) {
-                    x = min(x, argument[0]);
-                    y = min(y, argument[1] ?? argument[0]);
-                    z = min(z, argument[2] ?? argument[0]);
-                    return self;
-                } else {
-                    x = min(x, argument[0].x);
-                    y = min(y, argument[0].y);
-                    z = min(z, argument[0].z);
-                    return self;
-                }
-            } else {
-                return min(x, y, z);
-            }
+    static Min = function(v = undefined) {
+        if (is_undefined(v)) return min(x, y, z);
+        if (is_instanceof(v, Vector3)) {
+            x = min(x, v.x); y = min(y, v.y); z = min(z, v.z);
         } else {
-            if (argument_count > 1) {
-                if (is_numeric(argument[1])) {
-                    return new Vector3(
-                        min(argument[0].x, argument[1]),
-                        min(argument[0].y, argument[2] ?? argument[1]),
-                        min(argument[0].z, argument[3] ?? argument[1])
-                    )
-                } else {
-                    return new Vector3(
-                        min(argument[0].x, argument[1].x),
-                        min(argument[0].y, argument[1].y),
-                        min(argument[0].z, argument[1].z),
-                    )
-                }
-            } else {
-                return min(argument[0].x, argument[0].y, argument[0].z);
-            }
+            x = min(x, v); y = min(y, v); z = min(z, v);
         }
+        return self;
     }
-    static Max = function() {
-        if (is_instanceof(self, Vector3)) {
-            if (argument_count > 0) {
-                if (is_numeric(argument[0])) {
-                    x = max(x, argument[0]);
-                    y = max(y, argument[1] ?? argument[0]);
-                    z = max(z, argument[2] ?? argument[0]);
-                    return self;
-                } else {
-                    x = max(x, argument[0].x);
-                    y = max(y, argument[0].y);
-                    z = max(z, argument[0].z);
-                    return self;
-                }
-            } else {
-                return max(x, y, z);
-            }
+    static Max = function(v = undefined) {
+        if (is_undefined(v)) return max(x, y, z);
+        if (is_instanceof(v, Vector3)) {
+            x = max(x, v.x); y = max(y, v.y); z = max(z, v.z);
         } else {
-            if (argument_count > 1) {
-                if (is_numeric(argument[1])) {
-                    return new Vector3(
-                        max(argument[0].x, argument[1]),
-                        max(argument[0].y, argument[2] ?? argument[1]),
-                        max(argument[0].z, argument[3] ?? argument[1])
-                    )
-                } else {
-                    return new Vector3(
-                        max(argument[0].x, argument[1].x),
-                        max(argument[0].y, argument[1].y),
-                        max(argument[0].z, argument[1].z),
-                    )
-                }
-            } else {
-                return max(argument[0].x, argument[0].y, argument[0].z);
-            }
+            x = max(x, v); y = max(y, v); z = max(z, v);
         }
+        return self;
     }
     static Floor = function() {
-        if (is_instanceof(self, Vector3)) {
-            x = floor(x);
-            y = floor(y);
-            z = floor(z);
-            return self;
-        } else {
-            return new Vector3(
-                floor(argument[0].x), 
-                floor(argument[0].y), 
-                floor(argument[0].z)
-            )
-        }
+        x = floor(x); y = floor(y); z = floor(z);
+        return self;
     }
     static Ceil = function() {
-        if (is_instanceof(self, Vector3)) {
-            x = ceil(x);
-            y = ceil(y);
-            z = ceil(z);
-            return self;
-        } else {
-            return new Vector3(
-                ceil(argument[0].x), 
-                ceil(argument[0].y), 
-                ceil(argument[0].z)
-            )
-        }
+        x = ceil(x); y = ceil(y); z = ceil(z);
+        return self;
     }
     static Round = function() {
-        if (is_instanceof(self, Vector3)) {
-            x = round(x);
-            y = round(y);
-            z = round(z);
-            return self;
-        } else {
-            return new Vector3(
-                round(argument[0].x), 
-                round(argument[0].y), 
-                round(argument[0].z)
-            )
-        }
+        x = round(x); y = round(y); z = round(z);
+        return self;
     }
-
-    static Transform = function() {
-        if (is_instanceof(self, Vector3)) {
-            var _v = matrix_transform_vertex(argument[0], x, y, z);
-            x = _v[0];
-            y = _v[1];
-            z = _v[2];
-            return self;
-        } else {
-            var _v = matrix_transform_vertex(argument[1], argument[0].x, argument[0].y, argument[0].z);
-            return new Vector3(_v[0], _v[1], _v[2]);
-        }
+    
+    static Transform = function(m) {
+        static _v = array_create(4);
+        matrix_transform_vertex(m, x, y, z, 1, _v);
+        x = _v[0]; y = _v[1]; z = _v[2];
+        return self;
     }
-    static Rotate = function() {
-        if (is_instanceof(self, Vector3)) {
-            var _m = matrix_build(0, 0, 0, argument[0], argument[1], argument[2], 1, 1, 1);
-            var _v = matrix_transform_vertex(_m, x, y, z);
-            x = _v[0];
-            y = _v[1];
-            z = _v[2];
+    static Rotate = function(axis, angle) {
+        if (!is_instanceof(axis, Vector3)) {
+            __Trace("Rotate() accepts only a Vector axis");
             return self;
-        } else {
-            var _m = matrix_build(0, 0, 0, argument[1], argument[2], argument[3], 1, 1, 1);
-            var _v = matrix_transform_vertex(_m, argument[0].x, argument[0].y, argument[0].z);
-            return new Vector3(_v[0], _v[1], _v[2]);
         }
+        var _cos = dcos(angle);
+        var _sin = dsin(angle);
+        var _dot = dot_product_3d(axis.x, axis.y, axis.z, x, y, z);
+        var _cx = (axis.y * z) - (axis.z * y);
+        var _cy = (axis.z * x) - (axis.x * z);
+        var _cz = (axis.x * y) - (axis.y * x);
+        x = x * _cos + _cx * _sin + axis.x * _dot * (1 - _cos);
+        y = y * _cos + _cy * _sin + axis.y * _dot * (1 - _cos);
+        z = z * _cos + _cz * _sin + axis.z * _dot * (1 - _cos);
+        return self;
     }
-    static Lerp = function() {
-        if (is_instanceof(self, Vector3)) {
-            x = lerp(x, argument[0].x, argument[1]);
-            y = lerp(y, argument[0].y, argument[1]);
-            z = lerp(z, argument[0].z, argument[1]);
-            return self;
+    static Lerp = function(v, amt) {
+        if (is_instanceof(v, Vector3)) {
+            x = lerp(x, v.x, amt); y = lerp(y, v.y, amt); z = lerp(z, v.z, amt);
         } else {
-            return new Vector3(
-                lerp(argument[0].x, argument[1].x, argument[2]),
-                lerp(argument[0].y, argument[1].y, argument[2]),
-                lerp(argument[0].z, argument[1].z, argument[2])
-            );
+            x = lerp(x, v, amt); y = lerp(y, v, amt); z = lerp(z, v, amt);
         }
-    }    
-    static LerpReset = function() {
-        if (is_instanceof(self, Vector3)) {
-            x = lerp(x, xstart, argument[0]);
-            y = lerp(y, ystart, argument[0]);
-            z = lerp(z, zstart, argument[0]);
-            return self;
-        } else {
-            return new Vector3(
-                lerp(argument[0].x, argument[0].xstart, argument[1]),
-                lerp(argument[0].y, argument[0].ystart, argument[1]),
-                lerp(argument[0].z, argument[0].zstart, argument[1])
-            );
-        }    
+        return self;
     }
-
-    static Copy = function() {
-        if (is_instanceof(self, Vector3)) {
-            var _v = new Vector3(x, y, z);
-            _v.xstart = xstart;
-            _v.ystart = ystart;
-            _v.zstart = zstart;
-            return _v
-        } else {
-            var _v = new Vector3(argument[0].x, argument[0].y, argument[0].z);
-            _v.xstart = argument[0].xstart;
-            _v.ystart = argument[0].ystart;
-            _v.zstart = argument[0].zstart;
-            return _v
-        }
+    
+    static Clone = function() {
+        return new Vector3(x, y, z);
     }
-    static ToString = function() {
-        if (is_instanceof(self, Vector3)) {
-            return $"x: {x}, y: {y}, z: {z}";
-        } else {
-            return $"x: {argument[0].x}, y: {argument[0].y}, z: {argument[0].z}";
-        }
-        
+    static ToString = function(format = "x: {0}, y: {1}, z: {2}") {
+        return string(format, x, y, z);
     }
     static ToArray = function() {
-        if (is_instanceof(self, Vector3)) {
-            return [x, y, z];
-        } else {
-            return [argument[0].x, argument[0].y, argument[0].z];
-        }
+        return [x, y, z];
     }
 }
-
